@@ -19,7 +19,7 @@ app.use(
 app.use(express.json(), cookieParser());
 
 app.use('/auth', authRouter);
-app.use('/post', postRouter);
+app.use('/posts', postRouter);
 
 app.use('*splat', notFoundHandler);
 app.use(errorHandler);

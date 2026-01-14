@@ -1,6 +1,12 @@
 import type { RequestHandler } from 'express';
 import { Post } from '#models';
 
+export const getAllPosts: RequestHandler = async (req, res) => {
+  const allPosts = await Post.find();
+
+  res.json(allPosts);
+};
+
 export const createPost: RequestHandler = async (req, res) => {
   const { sanitizedBody } = req;
 
