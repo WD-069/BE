@@ -1,5 +1,54 @@
 import type { RequestHandler } from 'express';
+import { Post } from '#models';
 
-export const createPost: RequestHandler = async (req, res) => {};
-export const updatePost: RequestHandler = async (req, res) => {};
-export const deletePost: RequestHandler = async (req, res) => {};
+export const createPost: RequestHandler = async (req, res) => {
+  const { sanitizedBody } = req;
+
+  const newPost = await Post.create({
+    ...sanitizedBody,
+    author: req.userID
+  });
+
+  res.status(201).json(newPost);
+};
+
+export const getSinglePost: RequestHandler = async (req, res) => {
+  const {
+    params: { id }
+  } = req;
+
+  const post = await Post.findById(id).lean().populate('author');
+
+  if (!post) throw new Error(`Post with id of ${id} doesn't exist`, { cause: 404 });
+
+  res.json(post);
+};
+
+export const deletePost: RequestHandler = async (req, res) => {
+  const { userID, userRoles } = req;
+  const postID = req.params.id;
+  const isAdmin = userRoles?.includes('admin');
+
+  const post = await Post.findById(postID);
+
+  if (post?.author.toString() === userID || isAdmin) {
+    await Post.findByIdAndDelete(req.params.id);
+  } else {
+    throw new Error('Unauthorized', { cause: { status: 401 } });
+  }
+
+  res.status(200).json({ message: 'Successfully deleted' });
+};
+
+export const updatePost: RequestHandler = async (req, res) => {
+  const {
+    sanitizedBody,
+    params: { id }
+  } = req;
+
+  const updatedPost = await Post.findByIdAndUpdate(id, sanitizedBody, { new: true }).populate(
+    'author'
+  );
+  if (!updatedPost) throw new Error(`Post with id of ${id} doesn't exist`, { cause: 404 });
+  res.json(updatedPost);
+};

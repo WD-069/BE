@@ -6,11 +6,8 @@ import { loginSchema, registerSchema } from '#schemas'; // TODO: use the schemas
 const authRouter = Router();
 
 authRouter.post('/register', register);
-
 authRouter.post('/login', login);
-
 authRouter.delete('/logout', logout);
-
 authRouter.get('/me', me);
 
 export default authRouter;

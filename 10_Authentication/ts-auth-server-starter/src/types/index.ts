@@ -3,6 +3,8 @@ declare global {
   namespace Express {
     interface Request {
       userID?: string;
+      userRoles?: string[];
+      sanitizedBody: {};
     }
   }
 }

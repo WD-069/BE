@@ -53,7 +53,9 @@ export const login: RequestHandler = async (req, res) => {
     throw new Error('Incorrect Credentials', { cause: { status: 400 } });
   }
 
-  const token = jwt.sign({ userID: user._id }, ACCESS_JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ userID: user._id, userRoles: user.roles }, ACCESS_JWT_SECRET, {
+    expiresIn: '7d'
+  });
 
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions: CookieOptions = {
