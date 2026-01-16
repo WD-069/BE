@@ -11,7 +11,6 @@ const verifyToken: RequestHandler = async (req, res, next) => {
   }
 
   const payload = jwt.verify(token, ACCESS_JWT_SECRET) as JwtPayload;
-  console.log(payload);
 
   req.userID = payload.userID;
   req.userRoles = payload.userRoles;

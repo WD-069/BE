@@ -5,6 +5,13 @@ import { User } from '#models';
 import { ACCESS_JWT_SECRET, SALT_ROUNDS } from '#config';
 import type { UserType } from '#models/User';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: 'none'
+};
+
 export const register: RequestHandler = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
@@ -24,13 +31,6 @@ export const register: RequestHandler = async (req, res) => {
   });
 
   const token = jwt.sign({ userID: user._id }, ACCESS_JWT_SECRET, { expiresIn: '7d' });
-
-  const isProduction = process.env.NODE_ENV === 'production';
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: 'none'
-  };
 
   const userObj = user.toObject() as Partial<UserType>;
   delete userObj.password;
@@ -57,13 +57,6 @@ export const login: RequestHandler = async (req, res) => {
     expiresIn: '7d'
   });
 
-  const isProduction = process.env.NODE_ENV === 'production';
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: 'none'
-  };
-
   const userObj = user.toObject() as Partial<UserType>;
   delete userObj.password;
 
@@ -71,10 +64,13 @@ export const login: RequestHandler = async (req, res) => {
   res.status(200).json(userObj);
 };
 
-export const logout: RequestHandler = async (req, res) => {};
+export const logout: RequestHandler = async (req, res) => {
+  res.clearCookie('token', cookieOptions);
+  res.status(200).json({ message: 'Goodbye!' });
+};
 
 export const me: RequestHandler = async (req, res, next) => {
-  // TODO: Implement a me handler
-  // Get the access token and use it to retrieve the user's data
-  // Make sure that the token is valid and not expired
+  const user = await User.findById(req.userID);
+
+  res.json(user);
 };
