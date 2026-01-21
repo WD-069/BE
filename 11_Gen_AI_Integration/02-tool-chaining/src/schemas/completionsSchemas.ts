@@ -16,11 +16,18 @@ export const Intent = z.object({
 });
 
 export const FinalResponse = z.object({
-  id: z.number(),
-  name: z.string(),
-  aboutSpecies: z.string(),
-  types: z.array(z.string()),
-  abilities: z.array(z.string()),
-  abilitiesExplained: z.string(),
-  frontSpriteURL: z.string(),
+  isPokemon: z.boolean(),
+  pokemonInfo: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      aboutSpecies: z.string(),
+      types: z.array(z.string()),
+      abilities: z.array(z.string()),
+      abilitiesExplained: z.string(),
+      frontSpriteURL: z.string(),
+    })
+    .optional()
+    .nullable(),
+  error: z.string().optional().nullable(),
 });
