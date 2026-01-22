@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "mcp-aic-server": {
+      "command": "node",
+      "args": ["/home/kawa/Work/WD69-BE/11_Gen_AI_Integration/03-mcp-aic-server/dist/app.js"]
+    }
+  }
+}
