@@ -34,16 +34,6 @@ const CreatePost = () => {
       });
       setForm({ title: '', image: '', content: '' });
 
-      const baseURL = import.meta.env.VITE_APP_TRAVEL_JOURNAL_API_URL;
-
-      const res = await fetch(`${baseURL}/posts`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, image, content }),
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error('Login failed!');
-
       //User gets navigated to the page that shows the new post they created
       navigate(`/post/${newPost._id}`);
     } catch (error: unknown) {
