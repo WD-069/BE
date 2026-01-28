@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 export type PostType = {
   _id: Schema.Types.ObjectId;
@@ -8,6 +8,14 @@ export type PostType = {
   content: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+/** Input type for creating a post - author accepts string (converted to ObjectId by Mongoose) */
+export type CreatePostInput = {
+  title: string;
+  author: string;
+  image: string;
+  content: string;
 };
 
 const postSchema = new Schema<PostType>(

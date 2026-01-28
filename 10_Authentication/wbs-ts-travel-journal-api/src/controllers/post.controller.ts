@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express';
 import { Post } from '#models';
+import type { CreatePostInput } from '#models/Post';
 
 export const getAllPosts: RequestHandler = async (req, res) => {
   const allPosts = await Post.find();
@@ -8,12 +9,15 @@ export const getAllPosts: RequestHandler = async (req, res) => {
 };
 
 export const createPost: RequestHandler = async (req, res) => {
-  const { sanitizedBody } = req;
+  const { userID } = req;
+  const { title, image, content } = req.sanitizedBody as Omit<CreatePostInput, 'author'>;
 
-  const newPost = await Post.create({
-    ...sanitizedBody,
-    author: req.userID
-  });
+  if (!userID) throw new Error('Unauthorized', { cause: 401 });
+
+  // satisfies ensures compile-time type checking for our input shape
+  const postData = { title, image, content, author: userID } satisfies CreatePostInput;
+  // Cast needed because Mongoose v9 expects ObjectId but accepts string at runtime
+  const newPost = await Post.create(postData as Parameters<typeof Post.create>[0]);
 
   res.status(201).json(newPost);
 };
