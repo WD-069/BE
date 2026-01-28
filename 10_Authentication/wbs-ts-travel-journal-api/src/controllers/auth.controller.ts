@@ -1,8 +1,8 @@
-import type { RequestHandler, CookieOptions } from 'express';
 import bcrypt from 'bcrypt';
+import type { CookieOptions, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '#models';
 import { ACCESS_JWT_SECRET, SALT_ROUNDS } from '#config';
+import { User } from '#models';
 import type { UserType } from '#models/User';
 
 const isProduction = process.env.NODE_ENV === 'production';
