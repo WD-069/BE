@@ -1,10 +1,10 @@
 import '#db';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import cookieParser from 'cookie-parser';
-import { authRouter, postRouter } from '#routes';
-import { errorHandler, notFoundHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
+import { errorHandler, notFoundHandler } from '#middlewares';
+import { authRouter, postRouter } from '#routes';
 
 const app = express();
 const port = process.env.PORT || '3000';
@@ -17,6 +17,10 @@ app.use(
 );
 
 app.use(express.json(), cookieParser());
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 app.use('/auth', authRouter);
 app.use('/posts', postRouter);

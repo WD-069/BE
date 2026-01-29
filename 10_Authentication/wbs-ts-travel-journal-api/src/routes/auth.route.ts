@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { login, logout, me, register } from '#controllers';
-import { verifyToken, validateZod } from '#middlewares';
+import { validateZod, verifyToken } from '#middlewares';
 import { loginSchema, registerSchema } from '#schemas'; // TODO: use the schemas for validation
 
 const authRouter = Router();
