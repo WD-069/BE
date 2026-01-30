@@ -9,6 +9,9 @@ import { authRouter, postRouter } from '#routes';
 const app = express();
 const port = process.env.PORT || '3000';
 
+/** Used to verify Render.com re-deploys: new deploy = new startedAt */
+const startedAt = new Date().toISOString();
+
 app.use(
   cors({
     origin: CLIENT_BASE_URL, // for use with credentials, origin(s) need to be specified
@@ -19,7 +22,7 @@ app.use(
 app.use(express.json(), cookieParser());
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ status: 'ok', startedAt });
 });
 
 app.use('/auth', authRouter);
